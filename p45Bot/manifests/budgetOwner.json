@@ -1,8 +1,12 @@
 {
     "fileType": ".tf",
-    "fileNameExclusions": ["terraform-configuration"],
+    "fileNameExclusions": [
+        "terraform-configuration",
+        "variables"
+    ],
     "searchStrings": [
-        "budgetOwner"
+        "budgetAlerts",
+        "projectOwner"
     ],
     "upnSuffixes": [
         "tailspin.com"

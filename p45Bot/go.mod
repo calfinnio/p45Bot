@@ -29,7 +29,7 @@ require (
 	github.com/microsoft/kiota-serialization-form-go v0.9.0 // indirect
 	github.com/microsoft/kiota-serialization-json-go v0.8.2 // indirect
 	github.com/microsoft/kiota-serialization-text-go v0.7.0 // indirect
-	github.com/microsoftgraph/msgraph-sdk-go v0.57.0 // indirect
+	github.com/microsoftgraph/msgraph-sdk-go v0.58.0 // indirect
 	github.com/microsoftgraph/msgraph-sdk-go-core v0.34.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect

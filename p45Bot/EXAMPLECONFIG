@@ -1,0 +1,10 @@
+{
+    "manifest": "./manifests/budgetOwner.json",
+    "scanpath": "<PATH TO SCAN>",
+    "directorysource": "azuread",
+    "directoryconfig": {
+        "tenantid": "<TENANT ID>",
+        "clientid": "<SP CLIENT ID>",
+        "clientsecret": "<SECRET FOR SP - CAN ALSO BE ENVVAR OF AZ_SP_SECRET>"
+    }
+}

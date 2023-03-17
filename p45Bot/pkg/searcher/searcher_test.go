@@ -106,7 +106,7 @@ func TestFilterFiles(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := filterFiles(tt.filePath, tt.ext, tt.excl, tt.verbose)
+			got := filterFiles(tt.filePath, tt.ext, tt.excl)
 			if got != tt.expected {
 				t.Errorf("unexpected exclusion found: got %v, want %v", got, tt.expected)
 			}

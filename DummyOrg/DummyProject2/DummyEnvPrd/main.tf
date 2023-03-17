@@ -1,7 +1,7 @@
 module "awesome_sauce1" {
     source = "../../modules"
     environment = "dev"
-    projectOwner = "bob.jones@tailspin.com"
+    projectOwner = ["tim.alexander@calfinn.io"]
     budgetAlerts = ["Andy.Dufresne@tailspin.com", "oscar.wallace@tailspin.com"]
     
 }

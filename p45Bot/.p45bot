@@ -1,4 +1,10 @@
 {
     "manifest": "./manifests/budgetOwner.json",
-    "scanpath": "C:\\Users\\tim.DESKTOP-NE75G19\\git\\p45bot\\DummyOrg"
+    "scanpath": "C:\\Users\\tim.DESKTOP-NE75G19\\git\\p45bot\\DummyOrg",
+    "directorysource": "azuread",
+    "directoryconfig": {
+        "tenantid": "e253d9d6-21a0-4c8b-bcaf-bcb6054729cb",
+        "clientid": "c165e525-22d6-431c-9324-4fef07184c38",
+        "clientsecret": ""
+    }
 }

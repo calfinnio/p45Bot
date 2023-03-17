@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"calfinn.io/p45bot/pkg/opts"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,6 +17,7 @@ var Verbose bool
 var DryRun bool
 var Manifest string
 var Scanpath string
+var Output string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -54,15 +56,17 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.p45bot.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().BoolVarP(&opts.Verbose, "verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().BoolVarP(&DryRun, "dryrun", "d", false, "dryrun only")
 	rootCmd.PersistentFlags().StringVarP(&Manifest, "manifest", "m", "./manifests/example.json", "Path to manifest file")
 	rootCmd.PersistentFlags().StringVarP(&Scanpath, "scanpath", "s", "./", "Path to scan")
+	rootCmd.PersistentFlags().StringVarP(&Output, "output", "o", "", "Output type for commands")
 
 	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 	viper.BindPFlag("manifest", rootCmd.PersistentFlags().Lookup("manifest"))
 	viper.BindPFlag("dryrun", rootCmd.PersistentFlags().Lookup("dryrun"))
 	viper.BindPFlag("scanpath", rootCmd.PersistentFlags().Lookup("scanpath"))
+	viper.BindPFlag("output", rootCmd.PersistentFlags().Lookup("output"))
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -85,7 +89,8 @@ func initConfig() {
 		viper.SetConfigName(".p45bot")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	viper.AutomaticEnv() // read in environment variables that 
+	viper.BindEnv("directoryconfig.clientsecret", "AZ_SP_SECRET")
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {

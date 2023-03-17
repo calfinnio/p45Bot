@@ -4,8 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
+	"calfinn.io/p45bot/pkg/azure"
+	"calfinn.io/p45bot/pkg/opts"
 	"calfinn.io/p45bot/pkg/searcher"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -30,12 +34,76 @@ to quickly create a Cobra application.`,
 			fmt.Println("Using manifest file at:", viper.GetString("manifest"))
 		}
 		err := y.ReadInConfig() // Find and read the config file
-		if err != nil {         // Handle errors reading the config file
+		if err != nil {
 			panic(fmt.Errorf("fatal error config file: %w", err))
 		}
-		for _, s := range searcher.SearchFiles(viper.GetString("scanpath"), y.GetString("fileType"), y.GetStringSlice("fileNameExclusions"), viper.GetBool("verbose")) {
-			println(s)
+		//var results []searcher.SearchForResults
+		r := searcher.SearchForFiles(
+			viper.GetString("scanpath"),
+			y.GetString("fileType"),
+			y.GetStringSlice("fileNameExclusions"))
+
+		if err != nil {
+			panic(fmt.Errorf("fatal error string search file: %w", err))
 		}
+		client, err := azure.NewAZClient(
+			viper.GetString("directoryconfig.tenantid"),
+			viper.GetString("directoryconfig.clientid"),
+			viper.GetString("directoryconfig.clientsecret"))
+		if err != nil {
+			panic(fmt.Errorf("fatal error config file: %w", err))
+		}
+
+		rs, err := searcher.SearchString(
+			viper.GetString("scanpath"),
+			r.MatchingFiles,
+			y.GetStringSlice("searchStrings"))
+		if err != nil {
+			fmt.Println(err)
+		}
+		uniqueList := searcher.UniqueUpns(rs)
+		for i := range uniqueList {
+			userSearch, err := azure.GetUserByUPN(client, uniqueList[i].Upn)
+			if err != nil {
+				fmt.Println(err)
+			}
+			exists, err := azure.CheckUserExists(userSearch)
+			if err != nil {
+				fmt.Println(err)
+			}
+			uniqueList[i].Exists = exists
+			if opts.GetVerbose() {
+				fmt.Printf("%+v\n", uniqueList[i])
+			}
+		}
+
+		switch Output {
+		case "":
+			fmt.Println("File search stats:")
+			searcher.PrettyPrintJson(r)
+			fmt.Println("Raw Results (no UPN checks):")
+			searcher.PrettyPrintJson(rs)
+			fmt.Println("Unique UPNs, validated and collated:")
+			searcher.PrettyPrintJson(uniqueList)
+			//fmt.Printf("%+v\n", unqiueList)
+			//fmt.Printf("%+v\n", rs)
+
+		case "json":
+			data := searcher.DataOutputs{
+				Stats:        *r,
+				Raw:          rs,
+				ValidatedUpn: uniqueList,
+			}
+
+			file, _ := json.MarshalIndent(data, "", " ")
+			_ = ioutil.WriteFile("data.json", file, 0644)
+			//searcher.OutputToJson(r)
+			//searcher.OutputToJson(rs)
+		default:
+			searcher.PrettyPrintJson(r)
+			//	searcher.PrettyPrintJson(rs)
+		}
+
 	},
 }
 
