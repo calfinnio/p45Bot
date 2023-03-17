@@ -13,7 +13,7 @@ import (
 // setCmd represents the set command
 var setCmd = &cobra.Command{
 	Use:   "set",
-	Short: "Set configuration items",
+	Short: "TODO - Set configuration items",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 

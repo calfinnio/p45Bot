@@ -18,13 +18,25 @@ import (
 // scanCmd represents the scan command
 var scanCmd = &cobra.Command{
 	Use:   "scan",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Scans file extensions at path for strings and then validates those exist in AD.",
+	Long: `With a correctly defined manfiest, configuration and environment the following command
+	should be all that is required:
+	
+	    p45bot scan
+	
+	This will default to outputting the results to the console.  As an alternative a concatenated 
+	collection of results can be dumped to json using the --output flag:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	    p45bot scan --output json
+	
+	The current flow is:
+	- scan path for all files matching provided extension
+	- filter out those that are defined in the manifest exclusions (as an example you might want
+	to exclude all variables.tf files from the scrape)
+	- Iterates through those files and scans for matching strings/regex
+	- Sorts those results and structures them by unique UPNs
+	- Connects to AzureAD and searches for the UPN.  Returns true/false for each
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("scan called")
 		y := viper.New()

@@ -22,13 +22,17 @@ var Output string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "p45bot",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "P45Bot scans a given path for matching files, strings and then validates users exist.",
+	Long: `P45Bot scans a given path for matching files, strings and then validates users exist.
+It is designed with Terraform files in mind and currently only geared towards those and using 
+AzureAD as a source of truth but future iterations will expand this.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Viper is present to handle the configuration loading and operates against a local
+.p45bot config file containg paths to scan, where the manifest is and what the 
+credentials are for connecting to AzureAD.
+
+The manifest file requires a minimum config of the fileType, search strings and 
+filename exclusions (e.g. variables).`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -89,7 +93,7 @@ func initConfig() {
 		viper.SetConfigName(".p45bot")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that 
+	viper.AutomaticEnv() // read in environment variables that
 	viper.BindEnv("directoryconfig.clientsecret", "AZ_SP_SECRET")
 
 	// If a config file is found, read it in.

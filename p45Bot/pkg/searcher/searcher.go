@@ -59,14 +59,6 @@ type DataOutputs struct {
 	ValidatedUpn UpnFilteredResults
 }
 
-//func PrettyPrintJson() {
-//	prettyJSON, err := json.MarshalIndent(r, "", "  ")
-//	if err != nil {
-//		fmt.Println("Error:", err)
-//		return
-//	}
-//}
-
 func PrettyPrintJson(c CliOutput) {
 	fmt.Println(c.prettyPrint())
 }
@@ -177,7 +169,16 @@ func SearchString(root string, files, search []string) (SearchStringResults, err
 					if opts.GetVerbose() {
 						fmt.Printf("For '%s', text between brackets: %s\n", target, textBetweenBrackets)
 					}
-
+				} else if len(matches) == 0 {
+					if strings.Contains(line, target) {
+						lineSplit := strings.Split(line, "=")
+						var t SearchStringResult
+						t.FileName = targetFile
+						t.SearchString = string(target)
+						t.Upn = replacer.Replace(lineSplit[1])
+						t.LineNumber = lineNumber
+						r = append(r, t)
+					}
 				}
 			}
 			lineNumber++

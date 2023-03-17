@@ -13,7 +13,7 @@ import (
 // validateCmd represents the validate command
 var validateCmd = &cobra.Command{
 	Use:   "validate",
-	Short: "A brief description of your command",
+	Short: "TODO - A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
